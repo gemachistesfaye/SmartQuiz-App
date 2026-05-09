@@ -1,4 +1,4 @@
-# JS-Mastery 315 — Quiz App 🎯🧠
+# SmartQuiz-App 🎯🧠
 
 A lightweight and interactive **Quiz App** built during the **JS-Mastery 3125** course using **vanilla JavaScript**.
 This project focuses on core JavaScript logic, DOM manipulation and responsive UI design. ⚡🚀
@@ -16,7 +16,7 @@ This project focuses on core JavaScript logic, DOM manipulation and responsive U
 
 ---
 
-## 🌐 [Live Demo](https://gemachistesfaye.github.io/JS-Mastery-315/)
+## 🌐 [Live Demo](https://gemachistesfaye.github.io/SmartQuiz-App/)
 
 ---
 
@@ -25,7 +25,7 @@ This project focuses on core JavaScript logic, DOM manipulation and responsive U
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/quiz-app.git
+   git clone https://github.com/gemachistesfaye/SmartQuiz-App.git
    cd quiz-app
    ```
 
