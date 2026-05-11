@@ -10,7 +10,8 @@ import {
   LogOut,
   Sparkles,
   Zap,
-  ShieldCheck
+  ShieldCheck,
+  BarChart3
 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -23,6 +24,7 @@ const studentItems = [
   { icon: <Sparkles size={20} />, label: 'AI Assistant', path: '/ai-assistant' },
   { icon: <BookOpen size={20} />, label: 'Theory Vault', path: '/theory' },
   { icon: <ShieldCheck size={20} />, label: 'Cybersecurity', path: '/cybersecurity' },
+  { icon: <BarChart3 size={20} />, label: 'Analytics', path: '/analytics' },
   { icon: <Trophy size={20} />, label: 'Leaderboard', path: '/leaderboard' },
 ];
 

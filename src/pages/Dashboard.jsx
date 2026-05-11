@@ -6,6 +6,8 @@ import ProgressChart from '../components/dashboard/ProgressChart';
 import RecentActivity from '../components/dashboard/RecentActivity';
 import WeakTopics from '../components/dashboard/WeakTopics';
 import LeaderboardPreview from '../components/dashboard/LeaderboardPreview';
+import RecommendationEngine from '../components/dashboard/RecommendationEngine';
+import BadgeSystem from '../components/dashboard/BadgeSystem';
 import { useAuth } from '../context/AuthContext';
 import { Sparkles, Brain, Trophy, Zap, Target, BookOpen } from 'lucide-react';
 
@@ -43,7 +45,8 @@ export default function Dashboard() {
 
         {/* Action Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-6">
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-8">
+            <RecommendationEngine />
             <StatCards />
             <ProgressChart />
             
@@ -96,6 +99,11 @@ export default function Dashboard() {
 
             <RecentActivity />
           </div>
+        </div>
+
+        {/* Global Gamification */}
+        <div className="px-6">
+          <BadgeSystem />
         </div>
       </div>
     </DashboardLayout>
