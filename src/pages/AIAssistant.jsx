@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '../layouts/DashboardLayout';
-import { Send, Sparkles, Brain, Code, Lightbulb, User, Bot, Loader2, Zap } from 'lucide-react';
+import { Send, Sparkles, Brain, Code, Lightbulb, User, Bot, Loader2, Zap, Settings } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function AIAssistant() {
   const [messages, setMessages] = useState([
@@ -10,6 +11,8 @@ export default function AIAssistant() {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [apiKey, setApiKey] = useState(localStorage.getItem('gemini_api_key') || '');
+  const [showApiSettings, setShowApiSettings] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -20,6 +23,12 @@ export default function AIAssistant() {
     scrollToBottom();
   }, [messages]);
 
+  const saveApiKey = (key) => {
+    setApiKey(key);
+    localStorage.setItem('gemini_api_key', key);
+    setShowApiSettings(false);
+  };
+
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -29,7 +38,33 @@ export default function AIAssistant() {
     setInput('');
     setIsTyping(true);
 
-    // Pro JavaScript Intelligence Simulation
+    if (apiKey) {
+      try {
+        const genAI = new GoogleGenerativeAI(apiKey);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        
+        const prompt = `You are a specialized "Pro JavaScript Tutor" for the SmartQuiz app. 
+                       STRICT RULES:
+                       1. ONLY answer questions related to JavaScript, React, Web Security, CSS, and Web Development.
+                       2. If a user asks about anything else (history, cooking, politics, etc.), politely decline and remind them you are here for JavaScript mastery.
+                       3. Always provide code snippets in JavaScript/JSX where possible.
+                       4. The user's question is: "${input}".`;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+
+        setMessages(prev => [...prev, { role: 'bot', content: text }]);
+      } catch (error) {
+        console.error("Gemini API Error:", error);
+        setMessages(prev => [...prev, { role: 'bot', content: "⚠️ **API Error:** " + error.message + ". Please check your API key in settings." }]);
+      } finally {
+        setIsTyping(false);
+      }
+      return;
+    }
+
+    // Pro JavaScript Intelligence Simulation (Fallback)
     setTimeout(() => {
       let response = "";
       const lowerInput = input.toLowerCase();
@@ -60,21 +95,17 @@ export default function AIAssistant() {
                    "3. **Microtask Queue**: Where **Promises** (.then) go. Highest priority!\n" +
                    "4. **Task Queue**: Where setTimeout/setInterval go.\n\n" +
                    "*Tip: Microtasks always run before the next render or macrotask.*";
-      } else if (lowerInput.includes('prototype') || lowerInput.includes('inheritance')) {
-        response = "### 🧬 Prototypal Inheritance\n\n" +
-                   "Unlike Class-based languages, JS uses **Prototypes**. Every object has an internal link to another object called its prototype. \n\n" +
-                   "When you access a property that doesn't exist on an object, JS looks up the **Prototype Chain** until it finds it or hits `null`.";
-      } else if (lowerInput.includes('this keyword') || lowerInput.includes('this')) {
-        response = "### 📍 The `this` Keyword\n\n" +
-                   "The value of `this` is determined by **how a function is called** (Execution Context):\n\n" +
-                   "• **Global**: `window` (or `undefined` in strict mode).\n" +
-                   "• **Method**: The object owning the method.\n" +
-                   "• **Arrow Functions**: Lexically inherited from the parent scope (they don't have their own `this`).\n" +
-                   "• **Explicit**: Set using `.bind()`, `.call()`, or `.apply()`.";
-      } else if (lowerInput.includes('promise') || lowerInput.includes('async')) {
-        response = "### ⏳ Asynchronous Mastery\n\n" +
-                   "**Promises** solve 'callback hell' by providing a robust API for deferred values. \n\n" +
-                   "**Pro Tip:** Use `Promise.allSettled()` when you need all results regardless of failure, or `Promise.race()` for timeouts!";
+      } else if (lowerInput.includes('javascript') || lowerInput.includes('js')) {
+        response = "### 🚀 What is JavaScript?\n\n" +
+                   "**JavaScript** is a lightweight, interpreted, object-oriented language with first-class functions. While most known as the scripting language for Web pages, many non-browser environments also use it, such as **Node.js**.\n\n" +
+                   "It is a **multi-paradigm** language, supporting event-driven, functional, and imperative programming styles.";
+      } else if (lowerInput.includes('loop')) {
+        response = "### 🔁 JavaScript Loops\n\n" +
+                   "Loops are used to execute a block of code multiple times. Common types include:\n\n" +
+                   "• **for**: Standard iteration.\n" +
+                   "• **while**: Continues as long as a condition is true.\n" +
+                   "• **for...of**: Best for iterating over arrays.\n" +
+                   "• **for...in**: Best for iterating over object properties.";
       } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
         response = "Welcome back, Senior Dev! I'm ready to assist with your JavaScript architecture or debugging. What's on the roadmap today?";
       } else {
@@ -97,11 +128,67 @@ export default function AIAssistant() {
             </h1>
             <p className="text-gray-400 mt-1">Your personal JavaScript tutor, available 24/7.</p>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-green-500 uppercase tracking-widest">AI Online</span>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setShowApiSettings(!showApiSettings)}
+              className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white transition-all relative group"
+            >
+              <Settings size={20} />
+              <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-[#111] border border-white/10 rounded-lg text-[10px] text-gray-500 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+                AI API Settings
+              </div>
+            </button>
+            <div className={`flex items-center gap-2 px-4 py-2 border rounded-full transition-colors ${
+              apiKey ? 'bg-green-500/10 border-green-500/20 text-green-500' : 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500'
+            }`}>
+              <div className={`w-2 h-2 rounded-full animate-pulse ${apiKey ? 'bg-green-500' : 'bg-yellow-500'}`} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">
+                {apiKey ? 'Live API Active' : 'Simulation Mode'}
+              </span>
+            </div>
           </div>
         </div>
+
+        {/* API Settings Modal */}
+        <AnimatePresence>
+          {showApiSettings && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-24 right-6 w-80 glass-card p-6 z-50 border-primary/20 shadow-2xl"
+            >
+              <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <Settings size={16} /> Gemini API Config
+              </h3>
+              <p className="text-[10px] text-gray-500 mb-4 leading-relaxed">
+                Enter your Google Gemini API Key to enable real-time, unlimited AI conversations. 
+                Get one for free at <a href="https://aistudio.google.com/" target="_blank" rel="noreferrer" className="text-primary hover:underline">AI Studio</a>.
+              </p>
+              <input 
+                type="password" 
+                placeholder="Paste API Key here..."
+                defaultValue={apiKey}
+                className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs text-white focus:outline-none focus:border-primary/50 mb-4"
+                onBlur={(e) => saveApiKey(e.target.value)}
+              />
+              <div className="flex justify-between items-center">
+                <button 
+                  onClick={() => saveApiKey('')}
+                  className="text-[10px] text-red-400 hover:underline font-bold"
+                >
+                  Clear Key
+                </button>
+                <button 
+                  onClick={() => setShowApiSettings(false)}
+                  className="bg-primary text-white px-4 py-2 rounded-lg text-[10px] font-bold"
+                >
+                  Save & Close
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 flex-1 min-h-0">
           {/* Chat Window */}
