@@ -4,74 +4,36 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import { Play, RotateCcw, Code, Terminal, Sparkles, CheckCircle2 } from 'lucide-react';
 
 const SNIPPETS = [
-  {
-    name: "Standard Greeting",
-    code: `// Standard Greeting
-const greeting = "Hello, SmartQuiz Master!";
-const scores = [85, 92, 78, 95];
-const average = scores.reduce((a, b) => a + b) / scores.length;
-
-console.log(greeting);
-console.log("Your average score is:", average);
-return "Ready to master JS?";`
-  },
-  {
-    name: "Closure Practical",
-    code: `// Closure Practical
-function createBank(name) {
-  let balance = 1000;
-  return {
-    deposit: (amount) => { balance += amount; return balance; },
-    check: () => "Customer: " + name + " | Balance: $" + balance
-  };
-}
-
-const myAcc = createBank("Alice");
-myAcc.deposit(500);
-console.log(myAcc.check());
-return "Data is private inside the closure!";`
-  },
-  {
-    name: "Array Mastery",
-    code: `// Array Mastery
-const users = [
-  { name: "Alice", xp: 1200 },
-  { name: "Bob", xp: 850 },
-  { name: "Charlie", xp: 2100 }
-];
-
-const legends = users
-  .filter(u => u.xp > 1000)
-  .map(u => u.name.toUpperCase());
-
-console.log("Legends Found:", legends);
-return "Functional programming is powerful!";`
-  },
-  {
-    name: "Async Simulation",
-    code: `// Async Simulation (Mock)
-console.log("1. Starting process...");
-
-setTimeout(() => {
-  console.log("3. Data received after 2 seconds!");
-}, 2000);
-
-console.log("2. Moving to next task...");
-return "Check the console in 2s!";`
-  },
-  {
-    name: "Object Destructuring",
-    code: `// Object Destructuring
-const platform = {
-  name: "SmartQuiz",
-  stats: { users: 4500, uptime: "99.9%" },
-  features: ["AI", "Quizzes", "Security"]
-};
-
-const { name, stats: { uptime } } = platform;
-console.log(\`\${name} has an uptime of \${uptime}\`);
-return "Clean code via destructuring.";`
-  }
+  { name: "Standard Greeting", code: `const greeting = "Hello, SmartQuiz Master!";\nconst scores = [85, 92, 78, 95];\nconst average = scores.reduce((a, b) => a + b) / scores.length;\nconsole.log(greeting);\nconsole.log("Your average score is:", average);\nreturn "Ready to master JS?";` },
+  { name: "Closure Bank", code: `function createBank(name) {\n  let balance = 1000;\n  return {\n    deposit: (amt) => { balance += amt; return balance; },\n    check: () => name + "'s Balance: $" + balance\n  };\n}\nconst myAcc = createBank("Alice");\nmyAcc.deposit(500);\nconsole.log(myAcc.check());\nreturn "Private data secured.";` },
+  { name: "Array Mastery", code: `const users = [{n:"A",xp:1200},{n:"B",xp:800},{n:"C",xp:2500}];\nconst legends = users.filter(u => u.xp > 1000).map(u => u.n);\nconsole.log("Legends:", legends);\nreturn "Functional logic.";` },
+  { name: "Async Mock", code: `console.log("Start");\nsetTimeout(() => console.log("Task Done!"), 1500);\nconsole.log("Next...");\nreturn "Wait for console.";` },
+  { name: "Destructuring", code: `const user = { id: 1, info: { email: "test@sq.com" } };\nconst { info: { email } } = user;\nconsole.log("Email:", email);\nreturn "Clean extraction.";` },
+  { name: "Promise Chain", code: `Promise.resolve("Step 1")\n  .then(v => v + " -> Step 2")\n  .then(v => { console.log(v); return "Done"; });\nreturn "Promises are cleaner.";` },
+  { name: "Object Factory", code: `const createHero = (name, power) => ({ name, power, use() { return name + " uses " + power; } });\nconst h = createHero("Dev", "Clean Code");\nconsole.log(h.use());\nreturn "Factory pattern.";` },
+  { name: "Map vs Set", code: `const s = new Set([1, 2, 2, 3]);\nconst m = new Map([["a", 1]]);\nconsole.log("Set (Unique):", [...s]);\nconsole.log("Map Value:", m.get("a"));\nreturn "New ES6 collections.";` },
+  { name: "Recursion (Factorial)", code: `const fact = (n) => n <= 1 ? 1 : n * fact(n-1);\nconsole.log("Factorial of 5:", fact(5));\nreturn "Recursive logic.";` },
+  { name: "Proxy Validation", code: `const user = { age: 25 };\nconst proxy = new Proxy(user, {\n  set(target, prop, val) {\n    if (prop === 'age' && val < 0) throw Error("Invalid age");\n    target[prop] = val;\n    return true;\n  }\n});\nproxy.age = 30;\nconsole.log(proxy.age);\nreturn "Advanced Meta-programming.";` },
+  { name: "Currying Sum", code: `const sum = a => b => c => a + b + c;\nconsole.log("Sum(1)(2)(3):", sum(1)(2)(3));\nreturn "Currying pattern.";` },
+  { name: "Module Pattern", code: `const Counter = (() => {\n  let count = 0;\n  return {\n    inc: () => ++count,\n    val: () => count\n  };\n})();\nCounter.inc();\nconsole.log(Counter.val());\nreturn "Classic IIFE Module.";` },
+  { name: "Event Bus (Basic)", code: `const bus = {\n  events: {},\n  on(e, fn) { (this.events[e] = this.events[e] || []).push(fn); },\n  emit(e, d) { this.events[e]?.forEach(fn => fn(d)); }\n};\nbus.on('test', (v) => console.log('Heard:', v));\nbus.emit('test', 'Hello!');\nreturn "Simple Pub/Sub.";` },
+  { name: "Fibonacci Iterative", code: `function fib(n) {\n  let [a, b] = [0, 1];\n  while (n-- > 0) [a, b] = [b, a + b];\n  return a;\n}\nconsole.log("Fib 10:", fib(10));\nreturn "Efficient iteration.";` },
+  { name: "String Interpolation", code: `const u = "Dev", x = 5000;\nconsole.log(\`User \${u} has \${x} XP\`);\nreturn "Template Literals.";` },
+  { name: "Class Inheritance", code: `class Animal { constructor(n) { this.n = n; } speak() { return this.n + " makes a sound."; } }\nclass Dog extends Animal { speak() { return this.n + " barks!"; } }\nconst d = new Dog("Rex");\nconsole.log(d.speak());\nreturn "Modern Classes.";` },
+  { name: "Generator Function", code: `function* gen() { yield 1; yield 2; yield 3; }\nconst it = gen();\nconsole.log(it.next().value);\nconsole.log(it.next().value);\nreturn "Generators are cool.";` },
+  { name: "Default Parameters", code: `const greet = (n = "Guest") => "Welcome, " + n;\nconsole.log(greet());\nconsole.log(greet("Admin"));\nreturn "Clean defaults.";` },
+  { name: "Try/Catch Async", code: `async function test() {\n  try {\n    throw "Boom!";\n  } catch (e) { console.log("Caught:", e); }\n}\ntest();\nreturn "Error handling.";` },
+  { name: "Debounce Simulation", code: `const debounce = (fn, delay) => {\n  let t;\n  return () => { clearTimeout(t); t = setTimeout(fn, delay); };\n};\nconst act = debounce(() => console.log('Action!'), 500);\nact(); act(); // Only one log\nreturn "Performance tip.";` },
+  { name: "Object Assign", code: `const a = {x:1}, b = {y:2};\nconst c = Object.assign({}, a, b);\nconsole.log(c);\nreturn "Object merging.";` },
+  { name: "Symbol Key", code: `const id = Symbol('id');\nconst u = { [id]: 123, name: "A" };\nconsole.log(u[id]);\nreturn "Hidden unique keys.";` },
+  { name: "Nullish Coalescing", code: `const x = 0 ?? 10;\nconst y = null ?? 10;\nconsole.log(x, y);\nreturn "Better than || operator.";` },
+  { name: "Optional Chaining", code: `const u = { profile: { bio: "Hi" } };\nconsole.log(u?.meta?.tags?.[0]);\nreturn "Safe property access.";` },
+  { name: "Pipe Implementation", code: `const pipe = (...fns) => (v) => fns.reduce((a, f) => f(a), v);\nconst add1 = x => x + 1;\nconst sq = x => x * x;\nconsole.log(pipe(add1, sq)(2)); // (2+1)^2 = 9\nreturn "Functional pipes.";` },
+  { name: "Deep Clone (Basic)", code: `const obj = { a: { b: 1 } };\nconst clone = JSON.parse(JSON.stringify(obj));\nclone.a.b = 2;\nconsole.log(obj.a.b, clone.a.b);\nreturn "Deep vs Shallow.";` },
+  { name: "Memoize Function", code: `const memo = (fn) => {\n  const cache = {};\n  return (n) => cache[n] || (cache[n] = fn(n));\n};\nconst fastFact = memo(n => n <= 1 ? 1 : n * fastFact(n-1));\nconsole.log(fastFact(5));\nreturn "Caching results.";` },
+  { name: "Intersection Observer", code: `console.log("Mocking Observer Logic...");\n// Standard JS: new IntersectionObserver(cb, opt);\nreturn "Web API Knowledge.";` },
+  { name: "Worker PostMessage", code: `console.log("Main Thread -> Worker");\n// worker.postMessage({cmd: 'start'});\nreturn "Multi-threading in JS.";` },
+  { name: "Bitwise XOR Swap", code: `let a = 5, b = 10;\na ^= b; b ^= a; a ^= b;\nconsole.log("Swapped:", a, b);\nreturn "Low-level tricks.";` }
 ];
 
 export default function CodeLab() {
@@ -127,8 +89,8 @@ export default function CodeLab() {
 
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 flex-1 min-h-0 pb-10">
           {/* Snippet Library */}
-          <div className="xl:col-span-1 space-y-4">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest px-2 mb-4">Snippet Library</h3>
+          <div className="xl:col-span-1 space-y-4 max-h-[calc(100vh-250px)] overflow-y-auto pr-2 custom-scrollbar">
+            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest px-2 mb-4 sticky top-0 bg-[#0a0a0a] py-2 z-10">Snippet Library</h3>
             {SNIPPETS.map((s, i) => (
               <button
                 key={i}
