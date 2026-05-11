@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import QuizPage from './pages/QuizPage';
+import Profile from './pages/Profile';
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
 import ForgotPassword from './auth/ForgotPassword';
@@ -36,6 +37,14 @@ function App() {
           element={
             <ProtectedRoute>
               <QuizPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           } 
         />

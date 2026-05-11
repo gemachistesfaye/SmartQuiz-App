@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search, Bell, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
   const { userData } = useAuth();
@@ -22,7 +23,7 @@ export default function Header() {
           <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-[#0a0a0a]" />
         </button>
         
-        <div className="flex items-center gap-3 pl-4 border-l border-white/10 cursor-pointer group">
+        <Link to="/profile" className="flex items-center gap-3 pl-4 border-l border-white/10 cursor-pointer group">
           <div className="text-right">
             <p className="text-sm font-semibold text-white">{userData?.fullName || 'User'}</p>
             <p className="text-xs text-gray-500 capitalize">{userData?.role || 'Learner'}</p>
@@ -35,7 +36,7 @@ export default function Header() {
             />
           </div>
           <ChevronDown size={16} className="text-gray-500 group-hover:text-white transition-colors" />
-        </div>
+        </Link>
       </div>
     </header>
   );

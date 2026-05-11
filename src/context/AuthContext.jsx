@@ -6,7 +6,9 @@ import {
   signOut, 
   sendPasswordResetEmail,
   signInWithPopup,
-  updateProfile
+  updateProfile,
+  RecaptchaVerifier,
+  signInWithPhoneNumber
 } from 'firebase/auth';
 import { auth, googleProvider, db } from '../services/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -62,6 +64,20 @@ export function AuthProvider({ children }) {
     return sendPasswordResetEmail(auth, email);
   }
 
+  function setupRecaptcha(containerId) {
+    const recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
+      'size': 'invisible',
+      'callback': (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+      }
+    });
+    return recaptchaVerifier;
+  }
+
+  function signInWithPhone(phoneNumber, recaptchaVerifier) {
+    return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
@@ -88,6 +104,8 @@ export function AuthProvider({ children }) {
     loginWithGoogle,
     logout,
     resetPassword,
+    setupRecaptcha,
+    signInWithPhone,
     isAdmin: userData?.role === 'admin'
   };
 
