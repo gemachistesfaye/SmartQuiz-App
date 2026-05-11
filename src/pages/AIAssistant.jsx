@@ -28,19 +28,61 @@ export default function AIAssistant() {
     setInput('');
     setIsTyping(true);
 
-    // Simulate AI thinking
+    // Pro JavaScript Intelligence Simulation
     setTimeout(() => {
-      let response = "That's an interesting question about JavaScript! Based on your recent quizzes, you might want to focus on closures or async/await patterns. Would you like a quick explanation?";
+      let response = "";
+      const lowerInput = input.toLowerCase();
       
-      if (input.toLowerCase().includes('closure')) {
-        response = "A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment). In other words, a closure gives you access to an outer function's scope from an inner function.";
-      } else if (input.toLowerCase().includes('hoisting')) {
-        response = "Hoisting is a JavaScript mechanism where variables and function declarations are moved to the top of their containing scope during the compilation phase, before the code has been executed.";
+      if (lowerInput.includes('how can you help') || lowerInput.includes('what can you do')) {
+        response = "As a **Pro JS Assistant**, I provide: \n\n" +
+                   "• **Deep Dives**: Structural explanations of Engine internals (V8, Event Loop).\n" +
+                   "• **Code Audit**: Paste your snippets for optimization suggestions.\n" +
+                   "• **Architecture**: Advice on Design Patterns (Singleton, Factory, Observer).\n" +
+                   "• **Modern Standards**: ES2023+ features and best practices.";
+      } else if (lowerInput.includes('closure')) {
+        response = "### 🔒 JavaScript Closures\n\n" +
+                   "A closure is the combination of a function and the **lexical environment** within which that function was declared. \n\n" +
+                   "**Key Use Case:** Data Privacy.\n" +
+                   "```javascript\n" +
+                   "function createCounter() {\n" +
+                   "  let count = 0;\n" +
+                   "  return () => ++count;\n" +
+                   "}\n" +
+                   "const count = createCounter();\n" +
+                   "console.log(count()); // 1\n" +
+                   "```";
+      } else if (lowerInput.includes('event loop')) {
+        response = "### 🔄 The Event Loop\n\n" +
+                   "JavaScript is single-threaded but handles concurrency via the **Event Loop**. \n\n" +
+                   "1. **Call Stack**: Executes synchronous code.\n" +
+                   "2. **Web APIs**: Handles timers, DOM events, and fetch.\n" +
+                   "3. **Microtask Queue**: Where **Promises** (.then) go. Highest priority!\n" +
+                   "4. **Task Queue**: Where setTimeout/setInterval go.\n\n" +
+                   "*Tip: Microtasks always run before the next render or macrotask.*";
+      } else if (lowerInput.includes('prototype') || lowerInput.includes('inheritance')) {
+        response = "### 🧬 Prototypal Inheritance\n\n" +
+                   "Unlike Class-based languages, JS uses **Prototypes**. Every object has an internal link to another object called its prototype. \n\n" +
+                   "When you access a property that doesn't exist on an object, JS looks up the **Prototype Chain** until it finds it or hits `null`.";
+      } else if (lowerInput.includes('this keyword') || lowerInput.includes('this')) {
+        response = "### 📍 The `this` Keyword\n\n" +
+                   "The value of `this` is determined by **how a function is called** (Execution Context):\n\n" +
+                   "• **Global**: `window` (or `undefined` in strict mode).\n" +
+                   "• **Method**: The object owning the method.\n" +
+                   "• **Arrow Functions**: Lexically inherited from the parent scope (they don't have their own `this`).\n" +
+                   "• **Explicit**: Set using `.bind()`, `.call()`, or `.apply()`.";
+      } else if (lowerInput.includes('promise') || lowerInput.includes('async')) {
+        response = "### ⏳ Asynchronous Mastery\n\n" +
+                   "**Promises** solve 'callback hell' by providing a robust API for deferred values. \n\n" +
+                   "**Pro Tip:** Use `Promise.allSettled()` when you need all results regardless of failure, or `Promise.race()` for timeouts!";
+      } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
+        response = "Welcome back, Senior Dev! I'm ready to assist with your JavaScript architecture or debugging. What's on the roadmap today?";
+      } else {
+        response = "That's a solid inquiry. While I'm specialized in **ES6+ core mechanics**, I can also discuss **React Reconciliation**, **Virtual DOM**, or **Memory Management**. \n\nWould you like a deep dive into any of these?";
       }
 
       setMessages(prev => [...prev, { role: 'bot', content: response }]);
       setIsTyping(false);
-    }, 1500);
+    }, 1000);
   };
 
   return (
