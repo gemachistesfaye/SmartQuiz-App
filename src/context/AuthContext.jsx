@@ -60,6 +60,15 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  async function makeAdmin(password) {
+    if (password === 'smartadmin2026') {
+      const userRef = doc(db, "users", currentUser.uid);
+      await updateDoc(userRef, { role: 'admin' });
+      return true;
+    }
+    return false;
+  }
+
   function resetPassword(email) {
     return sendPasswordResetEmail(auth, email);
   }
