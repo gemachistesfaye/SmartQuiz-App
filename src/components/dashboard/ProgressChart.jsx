@@ -22,7 +22,7 @@ export default function ProgressChart() {
         </select>
       </div>
       
-      <div className="w-full h-full pb-10">
+      <div className="w-full h-full pb-10 min-h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
             <defs>

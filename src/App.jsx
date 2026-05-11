@@ -67,6 +67,9 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/messages" element={<ProtectedRoute><div className="p-10 text-white">Messages coming soon...</div></ProtectedRoute>} />
+        <Route path="/community" element={<ProtectedRoute><div className="p-10 text-white">Community coming soon...</div></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         
         {/* Admin Routes */}
         <Route 

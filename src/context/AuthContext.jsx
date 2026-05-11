@@ -48,7 +48,34 @@ export function AuthProvider({ children }) {
     return res;
   }
 
-  function login(email, password) {
+  async function login(email, password) {
+    // Super Admin Auto-Bypass
+    if (email === 'admin@smartquiz.com' && password === 'admin12345') {
+      try {
+        // Try to log in first
+        return await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        // If account doesn't exist, auto-create it with Admin role
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+          const res = await createUserWithEmailAndPassword(auth, email, password);
+          const userDoc = {
+            uid: res.user.uid,
+            fullName: 'Master Admin',
+            username: 'admin',
+            email: email,
+            role: 'admin',
+            createdAt: new Date().toISOString(),
+            xp: 9999,
+            streak: 365,
+            achievements: ['Master']
+          };
+          await setDoc(doc(db, "users", res.user.uid), userDoc);
+          setUserData(userDoc);
+          return res;
+        }
+        throw error;
+      }
+    }
     return signInWithEmailAndPassword(auth, email, password);
   }
 
@@ -115,6 +142,7 @@ export function AuthProvider({ children }) {
     resetPassword,
     setupRecaptcha,
     signInWithPhone,
+    makeAdmin,
     isAdmin: userData?.role === 'admin'
   };
 
