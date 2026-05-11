@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-import { questions } from '../data/questions';
+import { db } from '../services/firebase';
+import { collection, getDocs, doc, updateDoc, increment, getDoc } from 'firebase/firestore';
+import { useAuth } from '../context/AuthContext';
 
 const XP_PER_CORRECT = 50;
 const STREAK_BONUS = 10;
 
 export const useQuiz = (settings) => {
+  const { currentUser, userData } = useAuth();
   const [quizState, setQuizState] = useState({
     currentQuestionIndex: 0,
     score: 0,
@@ -18,36 +21,44 @@ export const useQuiz = (settings) => {
 
   const [currentQuestions, setCurrentQuestions] = useState([]);
 
-  // Initialize Quiz
-  const startQuiz = useCallback(() => {
-    let filtered = questions;
-    if (settings.difficulty !== 'all') {
-      filtered = questions.filter(q => q.difficulty === settings.difficulty);
-    }
-    
-    // Shuffle
-    const shuffled = [...filtered].sort(() => Math.random() - 0.5);
-    
-    // Limit for Marathon vs Daily
-    const finalQuestions = settings.mode === 'marathon' ? shuffled : shuffled.slice(0, 5);
+  // Initialize Quiz from Firestore
+  const startQuiz = useCallback(async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "questions"));
+      let fetchedQuestions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    setCurrentQuestions(finalQuestions);
-    setQuizState(prev => ({
-      ...prev,
-      currentQuestionIndex: 0,
-      score: 0,
-      xp: 0,
-      isFinished: false,
-      results: [],
-      timeLeft: settings.timerMode ? 30 : null,
-      isActive: true,
-    }));
+      if (settings.difficulty !== 'all') {
+        fetchedQuestions = fetchedQuestions.filter(q => q.difficulty === settings.difficulty);
+      }
+      
+      // Shuffle
+      const shuffled = [...fetchedQuestions].sort(() => Math.random() - 0.5);
+      
+      // Limit for Marathon vs Daily
+      const finalQuestions = settings.mode === 'marathon' ? shuffled : shuffled.slice(0, 5);
+
+      setCurrentQuestions(finalQuestions);
+      setQuizState(prev => ({
+        ...prev,
+        currentQuestionIndex: 0,
+        score: 0,
+        xp: 0,
+        isFinished: false,
+        results: [],
+        timeLeft: settings.timerMode ? 30 : null,
+        isActive: true,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch quiz questions:", error);
+    }
   }, [settings]);
 
   // Handle Answer
   const submitAnswer = (answerIndex) => {
+    if (!currentQuestions.length) return;
+    
     const currentQuestion = currentQuestions[quizState.currentQuestionIndex];
-    const isCorrect = answerIndex === currentQuestion.answer;
+    const isCorrect = answerIndex === currentQuestion.correct; // Note: using .correct from Firestore
     
     const newStreak = isCorrect ? quizState.streak + 1 : 0;
     const gainedXP = isCorrect ? XP_PER_CORRECT + (newStreak * STREAK_BONUS) : 0;
@@ -65,34 +76,49 @@ export const useQuiz = (settings) => {
         streak: newStreak,
         currentQuestionIndex: prev.currentQuestionIndex + 1,
         results: newResults,
-        timeLeft: settings.timerMode ? 30 : null, // Reset timer for next question
+        timeLeft: settings.timerMode ? 30 : null,
       }));
     } else {
       finishQuiz(isCorrect, gainedXP, newStreak, newResults);
     }
   };
 
-  const finishQuiz = (lastCorrect, lastXP, finalStreak, finalResults) => {
-    setQuizState(prev => {
-      const finalState = {
-        ...prev,
-        score: lastCorrect ? prev.score + 1 : prev.score,
-        xp: prev.xp + lastXP,
-        streak: finalStreak,
-        isFinished: true,
-        isActive: false,
-        results: finalResults
-      };
-      
-      // Persist to Local Storage
-      const savedStats = JSON.parse(localStorage.getItem('smartquiz_stats') || '{"totalXP": 0, "bestStreak": 0}');
-      localStorage.setItem('smartquiz_stats', JSON.stringify({
-        totalXP: savedStats.totalXP + finalState.xp,
-        bestStreak: Math.max(savedStats.bestStreak, finalState.streak)
-      }));
+  const finishQuiz = async (lastCorrect, lastXP, finalStreak, finalResults) => {
+    const finalScore = lastCorrect ? quizState.score + 1 : quizState.score;
+    const totalGainedXP = quizState.xp + lastXP;
 
-      return finalState;
-    });
+    setQuizState(prev => ({
+      ...prev,
+      score: finalScore,
+      xp: totalGainedXP,
+      streak: finalStreak,
+      isFinished: true,
+      isActive: false,
+      results: finalResults
+    }));
+
+    // Persist to Firestore
+    if (currentUser) {
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        
+        let updates = {
+          xp: increment(totalGainedXP)
+        };
+
+        if (userSnap.exists()) {
+          const currentBest = userSnap.data().streak || 0;
+          if (finalStreak > currentBest) {
+            updates.streak = finalStreak;
+          }
+        }
+
+        await updateDoc(userRef, updates);
+      } catch (error) {
+        console.error("Error updating user stats:", error);
+      }
+    }
   };
 
   // Timer Effect
@@ -103,7 +129,7 @@ export const useQuiz = (settings) => {
         setQuizState(prev => ({ ...prev, timeLeft: prev.timeLeft - 1 }));
       }, 1000);
     } else if (quizState.timeLeft === 0 && quizState.isActive) {
-      submitAnswer(-1); // Fail question if time runs out
+      submitAnswer(-1);
     }
     return () => clearInterval(timer);
   }, [quizState.isActive, quizState.timeLeft]);

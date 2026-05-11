@@ -26,18 +26,53 @@ const concepts = [
     example: 'console.log("Start");\nsetTimeout(() => console.log("Timeout"), 0);\nPromise.resolve().then(() => console.log("Promise"));\nconsole.log("End");\n// Output: Start, End, Promise, Timeout'
   },
   {
-    title: 'Scope',
+    title: 'Prototypes',
+    category: 'Advanced',
+    description: 'The mechanism by which JavaScript objects inherit features from one another.',
+    content: 'Every JavaScript object has a private property which holds a link to another object called its prototype. That prototype object has a prototype of its own, and so on until an object is reached with null as its prototype.',
+    example: 'const animal = { eats: true };\nconst rabbit = { jumps: true };\nrabbit.__proto__ = animal;\nconsole.log(rabbit.eats); // true'
+  },
+  {
+    title: 'This Keyword',
     category: 'Fundamentals',
-    description: 'The current context of execution in which values and expressions are "visible" or can be referenced.',
-    content: 'JavaScript has Global scope, Function (Local) scope, and Block scope (with let/const). Lexical scope means that functions are scoped based on where they are defined, not where they are executed.',
-    example: 'if (true) {\n  var x = 1; // Global scope\n  let y = 2; // Block scope\n}\nconsole.log(x); // 1\nconsole.log(y); // ReferenceError'
+    description: 'Refers to the object that is executing the current piece of code.',
+    content: 'The value of "this" depends on in which context it is used: Global, Function, Method, or Event handler. Arrow functions do not have their own "this".',
+    example: 'const person = {\n  name: "Alice",\n  greet() {\n    console.log("Hi, " + this.name);\n  }\n};\nperson.greet(); // Hi, Alice'
   },
   {
     title: 'Async/Await',
     category: 'Async',
-    description: 'Syntactic sugar built on top of Promises to write asynchronous code that looks and behaves like synchronous code.',
-    content: 'The "async" keyword makes a function return a Promise. The "await" keyword pauses the execution of an async function until a Promise is settled. It makes error handling easier with try/catch blocks.',
-    example: 'async function fetchData() {\n  try {\n    const response = await fetch(url);\n    const data = await response.json();\n    return data;\n  } catch (err) {\n    console.error(err);\n  }\n}'
+    description: 'Syntactic sugar for working with Promises in a synchronous-looking way.',
+    content: 'The async keyword makes a function return a Promise, and await makes JS wait until the promise settles and returns its result.',
+    example: 'async function getJSON() {\n  let response = await fetch(url);\n  let data = await response.json();\n  return data;\n}'
+  },
+  {
+    title: 'Strict Mode',
+    category: 'Fundamentals',
+    description: 'A way to opt in to a restricted variant of JavaScript.',
+    content: 'Strict mode makes it easier to write "secure" JavaScript. It changes previously accepted "silent errors" into real errors and fixes mistakes that make it difficult for JavaScript engines to perform optimizations.',
+    example: '"use strict";\nx = 3.14; // Throws ReferenceError'
+  },
+  {
+    title: 'Destructuring',
+    category: 'ES6+',
+    description: 'A syntax that allows you to unpack values from arrays, or properties from objects, into distinct variables.',
+    content: 'Destructuring makes code cleaner by extracting only the needed properties from objects or items from arrays without multiple lines of assignment.',
+    example: 'const user = { id: 1, name: "Joe" };\nconst { name } = user;\nconsole.log(name); // Joe'
+  },
+  {
+    title: 'Spread & Rest',
+    category: 'ES6+',
+    description: 'Operators used for array/object manipulation and handling multiple arguments.',
+    content: 'Spread (...) expands an iterable into its elements. Rest (...) collects multiple elements into a single array.',
+    example: 'const arr = [1, 2, 3];\nconst newArr = [...arr, 4];\nfunction sum(...args) { return args.reduce((a, b) => a + b); }'
+  },
+  {
+    title: 'Currying',
+    category: 'Functional',
+    description: 'Transforming a function that takes multiple arguments into a sequence of functions that each take a single argument.',
+    content: 'Currying is helpful in functional programming for partial application of functions and creating specialized versions of generic functions.',
+    example: 'const multiply = a => b => a * b;\nconst double = multiply(2);\nconsole.log(double(5)); // 10'
   }
 ];
 
