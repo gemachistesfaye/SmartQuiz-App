@@ -1,101 +1,16 @@
-# SmartQuiz-App 🎯🧠
+# React + Vite
 
-A lightweight and interactive **Quiz App** built during the **JS-Mastery 3125** course using **vanilla JavaScript**.
-This project focuses on core JavaScript logic, DOM manipulation and responsive UI design. ⚡🚀
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
----
+Currently, two official plugins are available:
 
-## ✨ Features
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-* Multiple-choice quiz questions
-* Real-time score calculation
-* Instant feedback after each question
-* Optional timer per question ⏱️
-* Fully responsive (mobile & desktop) 📱💻
-* Simple structure for easy customization 🎨
+## React Compiler
 
----
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## 🌐 [Live Demo](https://gemachistesfaye.github.io/SmartQuiz-App/)
+## Expanding the ESLint configuration
 
----
-
-## 🛠️ Installation & Usage
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/gemachistesfaye/SmartQuiz-App.git
-   cd quiz-app
-   ```
-
-2. Open the project:
-
-   * Simply open `index.html` in your browser
-     **OR**
-   * Use a local server (recommended):
-
-     ```bash
-     npx serve
-     ```
-
----
-
-## 📂 Project Structure
-
-```
-quiz-app/
-│── index.html
-│── style.css
-│── script.js
-└── README.md
-```
-
----
-
-## 🧩 Tech Stack
-
-* HTML5
-* CSS3
-* JavaScript (ES6+)
-
-*No frameworks or libraries used.*
-
----
-
-## 🧠 Customization
-
-* **Questions:** Update the questions array inside `script.js`
-* **Timer:** Enable or disable timer logic easily
-* **Styling:** Modify `style.css` to change colors, layout or fonts
-
----
-
-## 🚀 Deployment
-
-### GitHub Pages
-
-1. Push the project to GitHub
-2. Go to **Settings → Pages**
-3. Select:
-
-   * Branch: `main`
-   * Folder: `/root`
-4. Save and access your live link
-
----
-
-## 👤 Author
-
-**Gemachis Tesfaye**
-
-* GitHub: [https://github.com/gemachistesfaye](https://github.com/gemachistesfaye)
-* Field: Information Science Student
-* Focus: JavaScript, Frontend Development, Data Analysis
-
----
-
-⭐ If you find this project useful, give it a star and feel free to contribute!
-
-
-
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
