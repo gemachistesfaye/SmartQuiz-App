@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 
 export default function Header() {
-  const { userData, isAdmin } = useAuth();
+  const { userData, isAdmin, logout } = useAuth();
 
   return (
     <header className="flex items-center justify-between p-6 mb-2">
@@ -27,29 +27,49 @@ export default function Header() {
           }`} />
         </button>
         
-        <Link to="/profile" className="flex items-center gap-3 pl-4 border-l border-white/10 cursor-pointer group">
-          <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold text-white leading-none mb-1">{userData?.fullName || 'User'}</p>
-            <div className="flex items-center justify-end gap-2">
-              <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${
-                isAdmin ? 'bg-red-500/20 text-red-400' : 'bg-primary/20 text-primary'
-              }`}>
-                {userData?.role || 'Learner'}
-              </span>
-              <p className="text-[10px] text-gray-500 font-medium">Lvl {Math.floor((userData?.xp || 0) / 1000) + 1}</p>
+        <div className="flex items-center gap-3 pl-4 border-l border-white/10 relative group">
+          <Link to="/profile" className="flex items-center gap-3 cursor-pointer">
+            <div className="text-right hidden sm:block">
+              <p className="text-sm font-bold text-white leading-none mb-1">{userData?.fullName || 'User'}</p>
+              <div className="flex items-center justify-end gap-2">
+                <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${
+                  isAdmin ? 'bg-red-500/20 text-red-400' : 'bg-primary/20 text-primary'
+                }`}>
+                  {userData?.role || 'Learner'}
+                </span>
+                <p className="text-[10px] text-gray-500 font-medium">Lvl {Math.floor((userData?.xp || 0) / 1000) + 1}</p>
+              </div>
+            </div>
+            <div className="relative">
+              <img 
+                src={`https://ui-avatars.com/api/?name=${userData?.fullName || 'User'}&background=random`} 
+                alt="Profile" 
+                className={`w-10 h-10 rounded-xl border-2 transition-colors ${
+                  isAdmin ? 'border-red-500/20 group-hover:border-red-500' : 'border-white/10 group-hover:border-primary'
+                }`}
+              />
+            </div>
+            <ChevronDown size={16} className="text-gray-500 group-hover:text-white transition-colors" />
+          </Link>
+          
+          {/* Simple Dropdown on Hover */}
+          <div className="absolute top-full right-0 mt-2 w-48 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <div className="glass-card p-2 border border-white/10 shadow-2xl">
+              <Link to="/profile" className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                Settings
+              </Link>
+              <button 
+                onClick={async () => {
+                  await logout();
+                  window.location.reload();
+                }}
+                className="w-full text-left flex items-center gap-3 px-4 py-2 rounded-lg text-sm text-red-400 hover:bg-red-400/10 transition-all"
+              >
+                Logout
+              </button>
             </div>
           </div>
-          <div className="relative">
-            <img 
-              src={`https://ui-avatars.com/api/?name=${userData?.fullName || 'User'}&background=random`} 
-              alt="Profile" 
-              className={`w-10 h-10 rounded-xl border-2 transition-colors ${
-                isAdmin ? 'border-red-500/20 group-hover:border-red-500' : 'border-white/10 group-hover:border-primary'
-              }`}
-            />
-          </div>
-          <ChevronDown size={16} className="text-gray-500 group-hover:text-white transition-colors" />
-        </Link>
+        </div>
       </div>
     </header>
   );

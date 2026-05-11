@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
@@ -57,86 +57,51 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Protected Dashboard Routes */}
+        {/* Student Routes */}
         <Route 
           path="/dashboard" 
           element={
             <ProtectedRoute>
-              <DashboardSwitch />
+              <Dashboard />
             </ProtectedRoute>
           } 
         />
         <Route 
           path="/quiz" 
-          element={
-            <ProtectedRoute>
-              <QuizPage />
-            </ProtectedRoute>
-          } 
+          element={<ProtectedRoute><QuizPage /></ProtectedRoute>} 
         />
         <Route 
           path="/profile" 
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          } 
+          element={<ProtectedRoute><Profile /></ProtectedRoute>} 
         />
         <Route 
           path="/leaderboard" 
-          element={
-            <ProtectedRoute>
-              <Leaderboard />
-            </ProtectedRoute>
-          } 
+          element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} 
         />
         <Route 
           path="/codelab" 
-          element={
-            <ProtectedRoute>
-              <CodeLab />
-            </ProtectedRoute>
-          } 
+          element={<ProtectedRoute><CodeLab /></ProtectedRoute>} 
         />
         <Route 
           path="/ai-assistant" 
-          element={
-            <ProtectedRoute>
-              <AIAssistant />
-            </ProtectedRoute>
-          } 
+          element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} 
         />
         <Route 
           path="/theory" 
-          element={
-            <ProtectedRoute>
-              <TheoryVault />
-            </ProtectedRoute>
-          } 
+          element={<ProtectedRoute><TheoryVault /></ProtectedRoute>} 
         />
         <Route 
           path="/cybersecurity" 
-          element={
-            <ProtectedRoute>
-              <Cybersecurity />
-            </ProtectedRoute>
-          } 
+          element={<ProtectedRoute><Cybersecurity /></ProtectedRoute>} 
         />
         <Route 
           path="/analytics" 
-          element={
-            <ProtectedRoute>
-              <Analytics />
-            </ProtectedRoute>
-          } 
+          element={<ProtectedRoute><Analytics /></ProtectedRoute>} 
         />
-        <Route path="/messages" element={<ProtectedRoute><div className="p-10 text-white">Messages coming soon...</div></ProtectedRoute>} />
-        <Route path="/community" element={<ProtectedRoute><div className="p-10 text-white">Community coming soon...</div></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        
-        {/* Admin Routes */}
+
+        {/* Admin Routes (Strictly Protected) */}
         <Route 
-          path="/admin" 
+          path="/admin/dashboard" 
           element={
             <ProtectedRoute requireAdmin={true}>
               <SuperAdminDashboard />
@@ -159,6 +124,9 @@ function App() {
             </ProtectedRoute>
           } 
         />
+
+        {/* Catch-all Redirect */}
+        <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
       </Routes>
     </AuthProvider>
   );

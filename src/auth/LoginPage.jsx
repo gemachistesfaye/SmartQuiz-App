@@ -16,11 +16,9 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, isAdmin, userData } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const from = location.state?.from?.pathname || "/dashboard";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,19 +26,25 @@ export default function LoginPage() {
       setLoading(true);
       await login(formData.email, formData.password);
       toast.success("Welcome back!");
-      navigate(from, { replace: true });
+      // The role will be updated in the context, but we might need a small delay or a check
     } catch (error) {
       toast.error("Invalid email or password");
-    } finally {
       setLoading(false);
     }
   };
+
+  // Effect to handle redirection once userData is available
+  React.useEffect(() => {
+    if (userData) {
+      const from = location.state?.from?.pathname || (userData.role === 'admin' ? "/admin/dashboard" : "/dashboard");
+      navigate(from, { replace: true });
+    }
+  }, [userData, navigate, location.state]);
 
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
       toast.success("Logged in with Google!");
-      navigate(from, { replace: true });
     } catch (error) {
       toast.error("Google login failed");
     }

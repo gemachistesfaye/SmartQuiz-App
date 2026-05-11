@@ -7,7 +7,7 @@ import { useAuth } from '../context/AuthContext';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,12 +35,23 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-4">
           {currentUser ? (
-            <Link 
-              to="/dashboard" 
-              className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2"
-            >
-              <LayoutDashboard size={18} /> Dashboard
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link 
+                to="/dashboard" 
+                className="bg-primary/20 hover:bg-primary/30 text-primary px-6 py-2.5 rounded-full text-sm font-bold transition-all border border-primary/20 flex items-center gap-2"
+              >
+                <LayoutDashboard size={18} /> Dashboard
+              </Link>
+              <button 
+                onClick={async () => {
+                  await logout();
+                  window.location.reload();
+                }}
+                className="text-gray-400 hover:text-red-400 text-sm font-bold transition-colors"
+              >
+                Log out
+              </button>
+            </div>
           ) : (
             <>
               <Link to="/login" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Log in</Link>

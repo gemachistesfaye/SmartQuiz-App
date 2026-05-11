@@ -17,7 +17,7 @@ import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 
 const adminItems = [
-  { icon: <BarChart3 size={20} />, label: 'Admin Dashboard', path: '/admin' },
+  { icon: <BarChart3 size={20} />, label: 'Admin Dashboard', path: '/admin/dashboard' },
   { icon: <Users size={20} />, label: 'Manage Users', path: '/admin/users' },
   { icon: <Database size={20} />, label: 'Manage Questions', path: '/admin/questions' },
   { icon: <ClipboardList size={20} />, label: 'Quiz Analytics', path: '/admin/analytics' },
