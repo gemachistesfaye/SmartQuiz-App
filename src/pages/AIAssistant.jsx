@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '../layouts/DashboardLayout';
-import { Send, Sparkles, Brain, Code, Lightbulb, User, Bot, Loader2 } from 'lucide-react';
+import { Send, Sparkles, Brain, Code, Lightbulb, User, Bot, Loader2, Zap } from 'lucide-react';
 
 export default function AIAssistant() {
   const [messages, setMessages] = useState([

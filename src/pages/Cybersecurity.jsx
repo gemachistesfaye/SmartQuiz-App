@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '../layouts/DashboardLayout';
-import { ShieldCheck, ShieldAlert, Lock, UserCheck, Key, Eye, EyeOff, AlertTriangle, CheckCircle2, Play } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Lock, UserCheck, Key, Eye, EyeOff, AlertTriangle, CheckCircle2, Play, Target } from 'lucide-react';
 
 const securityTopics = [
   {
