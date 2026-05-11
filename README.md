@@ -1,6 +1,6 @@
 # SmartQuiz-App: The Ultimate JS Mastery Platform 🚀🛡️
 
-SmartQuiz is a production-grade, educational SaaS ecosystem designed to transform students into JavaScript masters. It features a hardened security architecture, real-time data persistence, and a pro-level AI tutor.
+SmartQuiz is a production-grade, educational SaaS ecosystem designed to transform students into JavaScript masters. It features a hardened security architecture, real-time data persistence and a pro-level AI tutor.
 
 ---
 
@@ -11,7 +11,7 @@ SmartQuiz is a production-grade, educational SaaS ecosystem designed to transfor
 *   **Theory Vault**: A deep-dive library covering 15+ advanced JS concepts (Event Loop, Closures, etc.).
 *   **Interactive Code Lab**: A sandbox with 30+ pre-built snippets for practicing professional patterns.
 *   **Cybersecurity Academy**: Hands-on labs focusing on web security (XSS, API protection).
-*   **Gamified Progression**: Earn XP, maintain daily streaks, and climb the **Global Leaderboard**.
+*   **Gamified Progression**: Earn XP, maintain daily streaks and climb the **Global Leaderboard**.
 
 ### 🤖 Pro AI Integration
 *   **Google Gemini 1.5 Support**: Unlimited tutoring via a secure "Bring Your Own Key" (BYOK) model.
@@ -20,7 +20,7 @@ SmartQuiz is a production-grade, educational SaaS ecosystem designed to transfor
 
 ### 🛡️ Admin & Security
 *   **Role-Based Access Control (RBAC)**: Strict separation between Student and Admin namespaces.
-*   **Admin Command Center**: Real-time platform metrics, user moderation, and question management.
+*   **Admin Command Center**: Real-time platform metrics, user moderation and question management.
 *   **Master Admin Bypass**: Secure backdoor for administrative continuity.
 *   **Firestore Security**: Hardened security rules for data integrity.
 
@@ -93,4 +93,4 @@ To access the **SuperAdmin Dashboard**, use the following master credentials:
 This project is open for enhancements! Feel free to fork and submit PRs for new features or learning modules.
 
 ## 📄 License
-MIT License - Created with ❤️ by Antigravity (Advanced Agentic AI).
+MIT License - Created with ❤️ by Gemachis.
