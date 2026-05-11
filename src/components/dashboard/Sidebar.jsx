@@ -13,7 +13,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 const menuItems = [
   { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/dashboard' },
-  { icon: <BookOpen size={20} />, label: 'My Quizzes', path: '/quizzes' },
+  { icon: <BookOpen size={20} />, label: 'My Quizzes', path: '/quiz' },
   { icon: <Trophy size={20} />, label: 'Leaderboard', path: '/leaderboard' },
   { icon: <Users size={20} />, label: 'Community', path: '/community' },
   { icon: <MessageSquare size={20} />, label: 'Messages', path: '/messages' },

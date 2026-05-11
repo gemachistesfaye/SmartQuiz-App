@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, Zap, Shield, Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   return (
@@ -46,14 +47,14 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] flex items-center justify-center gap-2 group">
+            <Link to="/dashboard" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] flex items-center justify-center gap-2 group">
               Start Learning Free
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="w-full sm:w-auto glass hover:bg-white/10 text-white px-8 py-4 rounded-full text-lg font-medium transition-all flex items-center justify-center gap-2 group">
+            </Link>
+            <Link to="/quiz" className="w-full sm:w-auto glass hover:bg-white/10 text-white px-8 py-4 rounded-full text-lg font-medium transition-all flex items-center justify-center gap-2 group">
               <Play className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors" />
-              Watch Demo
-            </button>
+              Quick Quiz
+            </Link>
           </motion.div>
 
           <motion.div
