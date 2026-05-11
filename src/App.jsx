@@ -1,23 +1,15 @@
 import React from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Stats from './components/Stats';
-import Features from './components/Features';
-import Testimonials from './components/Testimonials';
-import Footer from './components/Footer';
+import { Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
-    <div className="min-h-screen bg-background font-sans overflow-x-hidden selection:bg-primary/30">
-      <Navbar />
-      <main>
-        <Hero />
-        <Stats />
-        <Features />
-        <Testimonials />
-      </main>
-      <Footer />
-    </div>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      {/* Add more routes here as needed */}
+    </Routes>
   );
 }
 
