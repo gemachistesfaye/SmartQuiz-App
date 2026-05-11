@@ -58,14 +58,9 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex p-4 gap-4 overflow-hidden font-sans">
-      <Sidebar />
-      
-      <div className="flex-1 flex flex-col h-[calc(100vh-2rem)] overflow-y-auto custom-scrollbar">
-        <Header />
-        
-        <main className="p-6">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+    <DashboardLayout>
+      <div className="p-0">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
             
             {/* Add New Question */}
             <motion.div 
@@ -199,8 +194,8 @@ export default function AdminPanel() {
             </motion.div>
 
           </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

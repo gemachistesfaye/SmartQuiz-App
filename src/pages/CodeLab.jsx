@@ -55,19 +55,6 @@ return "Ready to master JS?";`);
   };
 
   return (
-    <div className="min-h-screen bg-background flex p-4 gap-4 overflow-hidden font-sans">
-      <Sidebar />
-      
-      <div className="flex-1 flex flex-col h-[calc(100vh-2rem)] overflow-y-auto custom-scrollbar">
-        <Header />
-        
-        <main className="p-6 h-full flex flex-col">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-                <Code className="text-primary" size={32} /> Code Lab
-              </h1>
-              <p className="text-gray-400 mt-1">Experiment with JavaScript in real-time</p>
             </div>
             <div className="flex gap-4">
               <button 
@@ -148,8 +135,8 @@ return "Ready to master JS?";`);
               </div>
             </motion.div>
           </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

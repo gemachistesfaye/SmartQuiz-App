@@ -34,14 +34,9 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex p-4 gap-4 overflow-hidden font-sans">
-      <Sidebar />
-      
-      <div className="flex-1 flex flex-col h-[calc(100vh-2rem)] overflow-y-auto custom-scrollbar">
-        <Header />
-        
-        <main className="p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <DashboardLayout>
+      <div className="p-0 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             {/* Left Column: Avatar & Stats */}
             <div className="lg:col-span-1 space-y-6">
@@ -198,10 +193,9 @@ export default function Profile() {
                 </div>
               </motion.div>
             </div>
-
           </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

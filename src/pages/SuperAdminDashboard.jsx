@@ -70,7 +70,7 @@ export default function SuperAdminDashboard() {
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-white/5 rounded-2xl">{stat.icon}</div>
-                <span className="text-xs font-bold text-green-400 flex items-center gap-1">
+                <span className="text-xs font-bold text-red-400 flex items-center gap-1">
                   <ArrowUpRight size={14} /> {stat.growth}
                 </span>
               </div>
@@ -84,15 +84,15 @@ export default function SuperAdminDashboard() {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <div className="glass-card p-8 min-h-[400px]">
             <h3 className="text-xl font-bold text-white mb-8 flex items-center gap-2">
-              <TrendingUp size={20} className="text-blue-400" /> User Growth Trends
+              <TrendingUp size={20} className="text-red-400" /> Platform Growth Trends
             </h3>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={userGrowth}>
                   <defs>
                     <linearGradient id="colorAdmin" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
@@ -100,10 +100,10 @@ export default function SuperAdminDashboard() {
                   <YAxis stroke="#6b7280" fontSize={12} axisLine={false} tickLine={false} />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#111', border: '1px solid #ffffff10', borderRadius: '12px' }}
-                    itemStyle={{ color: '#3b82f6' }}
+                    itemStyle={{ color: '#ef4444' }}
                   />
-                  <Area type="monotone" dataKey="total" stroke="#3b82f6" fillOpacity={1} fill="url(#colorAdmin)" />
-                  <Area type="monotone" dataKey="active" stroke="#10b981" fillOpacity={0} />
+                  <Area type="monotone" dataKey="total" stroke="#ef4444" fillOpacity={1} fill="url(#colorAdmin)" />
+                  <Area type="monotone" dataKey="active" stroke="#f87171" fillOpacity={0} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

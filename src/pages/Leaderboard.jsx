@@ -26,20 +26,6 @@ export default function Leaderboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex p-4 gap-4 overflow-hidden font-sans">
-      <Sidebar />
-      
-      <div className="flex-1 flex flex-col h-[calc(100vh-2rem)] overflow-y-auto custom-scrollbar">
-        <Header />
-        
-        <main className="p-6">
-          <div className="max-w-4xl mx-auto">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center mb-12"
-            >
-              <div className="bg-yellow-400/20 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6">
                 <Trophy className="text-yellow-400" size={40} />
               </div>
               <h1 className="text-4xl font-bold text-white mb-2">Global Leaderboard</h1>
@@ -99,8 +85,8 @@ export default function Leaderboard() {
               )}
             </div>
           </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

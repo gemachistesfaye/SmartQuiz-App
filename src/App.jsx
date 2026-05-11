@@ -12,6 +12,7 @@ import AIAssistant from './pages/AIAssistant';
 import TheoryVault from './pages/TheoryVault';
 import Cybersecurity from './pages/Cybersecurity';
 import Analytics from './pages/Analytics';
+import UserManagement from './pages/admin/UserManagement';
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
 import ForgotPassword from './auth/ForgotPassword';
@@ -136,6 +137,22 @@ function App() {
         {/* Admin Routes */}
         <Route 
           path="/admin" 
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <SuperAdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/users" 
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <UserManagement />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/questions" 
           element={
             <ProtectedRoute requireAdmin={true}>
               <AdminPanel />
