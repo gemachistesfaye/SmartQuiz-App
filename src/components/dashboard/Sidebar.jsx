@@ -8,7 +8,8 @@ import {
   Brain,
   MessageSquare,
   Users,
-  ShieldAlert
+  ShieldAlert,
+  Code
 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
