@@ -20,9 +20,12 @@ const adminItems = [
   { icon: <BarChart3 size={20} />, label: 'Admin Dashboard', path: '/admin/dashboard' },
   { icon: <Users size={20} />, label: 'Manage Users', path: '/admin/users' },
   { icon: <Database size={20} />, label: 'Manage Questions', path: '/admin/questions' },
-  { icon: <ClipboardList size={20} />, label: 'Quiz Analytics', path: '/admin/analytics' },
-  { icon: <FileText size={20} />, label: 'Reports', path: '/admin/reports' },
-  { icon: <Megaphone size={20} />, label: 'Announcements', path: '/admin/announcements' },
+];
+
+const studentTools = [
+  { icon: <Brain size={20} />, label: 'AI Assistant', path: '/ai-assistant' },
+  { icon: <ShieldAlert size={20} />, label: 'Cybersecurity', path: '/cybersecurity' },
+  { icon: <ClipboardList size={20} />, label: 'Theory Vault', path: '/theory' },
 ];
 
 export default function AdminSidebar() {
@@ -49,9 +52,25 @@ export default function AdminSidebar() {
         <span className="text-xl font-bold tracking-tighter text-white">Smart<span className="text-red-500">Admin</span></span>
       </div>
 
-      <nav className="flex-1 space-y-2">
+      <nav className="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
         <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 px-4">Admin Console</div>
         {adminItems.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+              location.pathname === item.path 
+                ? 'bg-red-500 text-white shadow-lg shadow-red-500/30' 
+                : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            {item.icon}
+            <span className="font-medium text-sm">{item.label}</span>
+          </Link>
+        ))}
+
+        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-8 mb-4 px-4">Learning Tools</div>
+        {studentTools.map((item) => (
           <Link
             key={item.path}
             to={item.path}

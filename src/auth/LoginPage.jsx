@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Mail, Lock, Eye, EyeOff, Brain, LogIn, Phone } from 'lucide-react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../services/firebase';
 import PhoneLogin from './PhoneLogin';
 
 export default function LoginPage() {
@@ -16,35 +18,41 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  const { login, loginWithGoogle, isAdmin, userData } = useAuth();
+  const { login, loginWithGoogle, userData } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // If already logged in and we have user data, redirect immediately
+  useEffect(() => {
+    if (userData) {
+      const dest = userData.role === 'admin' ? "/admin/dashboard" : "/dashboard";
+      navigate(dest, { replace: true });
+    }
+  }, [userData, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await login(formData.email, formData.password);
+      const { userDoc } = await login(formData.email, formData.password);
       toast.success("Welcome back!");
-      // The role will be updated in the context, but we might need a small delay or a check
+      
+      const dest = userDoc.role === 'admin' ? "/admin/dashboard" : "/dashboard";
+      navigate(dest, { replace: true });
     } catch (error) {
+      console.error(error);
       toast.error("Invalid email or password");
       setLoading(false);
     }
   };
 
-  // Effect to handle redirection once userData is available
-  React.useEffect(() => {
-    if (userData) {
-      const from = location.state?.from?.pathname || (userData.role === 'admin' ? "/admin/dashboard" : "/dashboard");
-      navigate(from, { replace: true });
-    }
-  }, [userData, navigate, location.state]);
-
   const handleGoogleLogin = async () => {
     try {
-      await loginWithGoogle();
+      const { userDoc } = await loginWithGoogle();
       toast.success("Logged in with Google!");
+      
+      const dest = userDoc.role === 'admin' ? "/admin/dashboard" : "/dashboard";
+      navigate(dest, { replace: true });
     } catch (error) {
       toast.error("Google login failed");
     }

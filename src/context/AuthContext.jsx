@@ -52,11 +52,36 @@ export function AuthProvider({ children }) {
     // Super Admin Auto-Bypass
     if (email === 'admin@smartquiz.com' && password === 'admin12345') {
       try {
-        // Try to log in first
-        return await signInWithEmailAndPassword(auth, email, password);
+        const res = await signInWithEmailAndPassword(auth, email, password);
+        const docRef = doc(db, "users", res.user.uid);
+        const docSnap = await getDoc(docRef);
+        
+        let userDoc;
+        if (docSnap.exists()) {
+          userDoc = { ...docSnap.data(), role: 'admin' };
+          // Sync back to Firestore if role was different
+          if (docSnap.data().role !== 'admin') {
+            await setDoc(docRef, userDoc);
+          }
+        } else {
+          userDoc = {
+            uid: res.user.uid,
+            fullName: 'Master Admin',
+            username: 'admin',
+            email: email,
+            role: 'admin',
+            createdAt: new Date().toISOString(),
+            xp: 9999,
+            streak: 365,
+            achievements: ['Master']
+          };
+          await setDoc(docRef, userDoc);
+        }
+        setUserData(userDoc);
+        return { ...res, userDoc };
       } catch (error) {
         // If account doesn't exist, auto-create it with Admin role
-        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
           const res = await createUserWithEmailAndPassword(auth, email, password);
           const userDoc = {
             uid: res.user.uid,
@@ -71,16 +96,42 @@ export function AuthProvider({ children }) {
           };
           await setDoc(doc(db, "users", res.user.uid), userDoc);
           setUserData(userDoc);
-          return res;
+          return { ...res, userDoc };
         }
         throw error;
       }
     }
-    return signInWithEmailAndPassword(auth, email, password);
+    const res = await signInWithEmailAndPassword(auth, email, password);
+    const docRef = doc(db, "users", res.user.uid);
+    const docSnap = await getDoc(docRef);
+    let userDoc = docSnap.exists() ? docSnap.data() : { role: 'student' };
+    setUserData(userDoc);
+    return { ...res, userDoc };
   }
 
-  function loginWithGoogle() {
-    return signInWithPopup(auth, googleProvider);
+  async function loginWithGoogle() {
+    const res = await signInWithPopup(auth, googleProvider);
+    const docRef = doc(db, "users", res.user.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      setUserData(docSnap.data());
+    } else {
+      // Create new user doc if it doesn't exist (Google first time)
+      const userDoc = {
+        uid: res.user.uid,
+        fullName: res.user.displayName,
+        username: res.user.email.split('@')[0],
+        email: res.user.email,
+        role: 'student',
+        createdAt: new Date().toISOString(),
+        xp: 0,
+        streak: 0,
+        achievements: []
+      };
+      await setDoc(docRef, userDoc);
+      setUserData(userDoc);
+    }
+    return { ...res, userDoc: userDoc || docSnap.data() };
   }
 
   function logout() {
@@ -122,6 +173,8 @@ export function AuthProvider({ children }) {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setUserData(docSnap.data());
+        } else {
+          setUserData({ role: 'student' }); // Default fallback
         }
       } else {
         setUserData(null);
