@@ -1,7 +1,10 @@
 import React from 'react';
 import { Search, Bell, ChevronDown } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Header() {
+  const { userData } = useAuth();
+
   return (
     <header className="flex items-center justify-between p-6 mb-2">
       <div className="relative w-96 hidden md:block">
@@ -21,12 +24,12 @@ export default function Header() {
         
         <div className="flex items-center gap-3 pl-4 border-l border-white/10 cursor-pointer group">
           <div className="text-right">
-            <p className="text-sm font-semibold text-white">Alex Johnson</p>
-            <p className="text-xs text-gray-500">Gold Learner</p>
+            <p className="text-sm font-semibold text-white">{userData?.fullName || 'User'}</p>
+            <p className="text-xs text-gray-500 capitalize">{userData?.role || 'Learner'}</p>
           </div>
           <div className="relative">
             <img 
-              src="https://i.pravatar.cc/150?img=12" 
+              src={`https://ui-avatars.com/api/?name=${userData?.fullName || 'User'}&background=random`} 
               alt="Profile" 
               className="w-10 h-10 rounded-xl border-2 border-white/10 group-hover:border-primary transition-colors"
             />

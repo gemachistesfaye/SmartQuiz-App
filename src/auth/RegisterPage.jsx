@@ -1,0 +1,163 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { User, Mail, Lock, Eye, EyeOff, Brain, ShieldCheck } from 'lucide-react';
+
+export default function RegisterPage() {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    agree: false
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  const { register } = useAuth();
+  const navigate = useNavigate();
+
+  const validate = () => {
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return false;
+    }
+    if (!formData.agree) {
+      toast.error("You must agree to the Terms & Conditions");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    try {
+      setLoading(true);
+      await register(formData.email, formData.password, formData.fullName, formData.username);
+      toast.success("Account created successfully!");
+      navigate('/dashboard');
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Background Glows */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[120px] rounded-full" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 blur-[120px] rounded-full" />
+
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card max-w-md w-full p-8 relative z-10"
+      >
+        <div className="text-center mb-8">
+          <div className="bg-primary/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Brain className="text-primary" size={32} />
+          </div>
+          <h1 className="text-2xl font-bold text-white">Join SmartQuiz</h1>
+          <p className="text-gray-400 text-sm mt-1">Start your journey to JS mastery</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+            <input 
+              type="text" 
+              placeholder="Full Name" 
+              required
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
+              onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+            />
+          </div>
+
+          <div className="relative">
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+            <input 
+              type="text" 
+              placeholder="Username" 
+              required
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
+              onChange={(e) => setFormData({...formData, username: e.target.value})}
+            />
+          </div>
+
+          <div className="relative">
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+            <input 
+              type="email" 
+              placeholder="Email Address" 
+              required
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+            />
+          </div>
+
+          <div className="relative">
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+            <input 
+              type={showPassword ? "text" : "password"} 
+              placeholder="Password" 
+              required
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-12 text-white focus:outline-none focus:border-primary/50 transition-colors"
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+            />
+            <button 
+              type="button"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          <div className="relative">
+            <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+            <input 
+              type="password" 
+              placeholder="Confirm Password" 
+              required
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
+              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+            />
+          </div>
+
+          <div className="flex items-center gap-3 py-2">
+            <input 
+              type="checkbox" 
+              id="agree"
+              className="w-4 h-4 rounded border-white/10 bg-white/5 text-primary focus:ring-primary/20"
+              onChange={(e) => setFormData({...formData, agree: e.target.checked})}
+            />
+            <label htmlFor="agree" className="text-xs text-gray-400">
+              I agree to the <span className="text-primary hover:underline cursor-pointer">Terms & Conditions</span>
+            </label>
+          </div>
+
+          <button 
+            disabled={loading}
+            className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-primary/20 disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Create Account"}
+          </button>
+        </form>
+
+        <p className="text-center text-gray-500 text-sm mt-8">
+          Already have an account? <Link to="/login" className="text-primary font-bold hover:underline">Log In</Link>
+        </p>
+      </motion.div>
+    </div>
+  );
+}

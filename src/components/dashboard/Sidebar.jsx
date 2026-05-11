@@ -7,9 +7,12 @@ import {
   LogOut, 
   Brain,
   MessageSquare,
-  Users
+  Users,
+  ShieldAlert
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const menuItems = [
   { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/dashboard' },
@@ -21,6 +24,18 @@ const menuItems = [
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout, isAdmin } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success("Logged out successfully");
+      navigate('/login');
+    } catch (error) {
+      toast.error("Failed to log out");
+    }
+  };
 
   return (
     <aside className="w-64 glass-card h-[calc(100vh-2rem)] sticky top-4 left-4 flex flex-col p-6 hidden lg:flex">
@@ -46,6 +61,20 @@ export default function Sidebar() {
             <span className="font-medium">{item.label}</span>
           </Link>
         ))}
+
+        {isAdmin && (
+          <Link
+            to="/admin"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+              location.pathname === '/admin' 
+                ? 'bg-red-500 text-white shadow-lg shadow-red-500/30' 
+                : 'text-red-400 hover:text-white hover:bg-red-400/10'
+            }`}
+          >
+            <ShieldAlert size={20} />
+            <span className="font-medium">Admin Panel</span>
+          </Link>
+        )}
       </nav>
 
       <div className="pt-6 border-t border-white/10 space-y-2">
@@ -53,7 +82,10 @@ export default function Sidebar() {
           <Settings size={20} />
           <span className="font-medium">Settings</span>
         </Link>
-        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-400/10 transition-all">
+        <button 
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-400/10 transition-all"
+        >
           <LogOut size={20} />
           <span className="font-medium">Logout</span>
         </button>
