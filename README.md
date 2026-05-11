@@ -64,20 +64,18 @@ SmartQuiz is a production-grade, educational SaaS ecosystem designed to transfor
 
 ---
 
-## 📂 Project Structure
+## 📚 Documentation
 
-```
-SmartQuiz-App/
-├── src/
-│   ├── auth/           # Login, Register, Protected Routes
-│   ├── components/     # UI Components, Dashboards, Layouts
-│   ├── context/        # Auth and Data Contexts
-│   ├── hooks/          # Custom Quiz & State Hooks
-│   ├── pages/          # All Platform Views (Admin & Student)
-│   ├── services/       # Firebase and AI Logic
-│   └── styles/         # Global CSS & Design System
-└── public/             # Assets & Images
-```
+For a deep dive into the platform's architecture and systems, explore our official documentation:
+
+*   **[Project Overview](./docs/PROJECT_OVERVIEW.md)**: Mission and core philosophy.
+*   **[Features](./docs/FEATURES.md)**: Detailed breakdown of Student and Admin tools.
+*   **[Architecture](./docs/ARCHITECTURE.md)**: Tech stack and data flow diagrams.
+*   **[Authentication](./docs/AUTH_SYSTEM.md)**: Role management and security flow.
+*   **[Database Schema](./docs/FIREBASE_SCHEMA.md)**: Firestore collections and data model.
+*   **[Security](./docs/SECURITY.md)**: RBAC enforcement and safety guardrails.
+*   **[AI System](./docs/AI_SYSTEM.md)**: Gemini 1.5 integration and prompt engineering.
+*   **[Roadmap](./docs/ROADMAP.md)**: Future goals and development phases.
 
 ---
 
