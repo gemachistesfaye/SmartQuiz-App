@@ -4,6 +4,9 @@ import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import QuizPage from './pages/QuizPage';
 import Profile from './pages/Profile';
+import Leaderboard from './pages/Leaderboard';
+import AdminPanel from './pages/AdminPanel';
+import CodeLab from './pages/CodeLab';
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
 import ForgotPassword from './auth/ForgotPassword';
@@ -48,13 +51,29 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/leaderboard" 
+          element={
+            <ProtectedRoute>
+              <Leaderboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/codelab" 
+          element={
+            <ProtectedRoute>
+              <CodeLab />
+            </ProtectedRoute>
+          } 
+        />
         
-        {/* Admin Routes (Placeholder) */}
+        {/* Admin Routes */}
         <Route 
           path="/admin" 
           element={
             <ProtectedRoute requireAdmin={true}>
-              <div className="p-10 text-white">Admin Panel coming soon...</div>
+              <AdminPanel />
             </ProtectedRoute>
           } 
         />

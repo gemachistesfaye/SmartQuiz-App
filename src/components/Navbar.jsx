@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Menu, X } from 'lucide-react';
+import { Brain, Menu, X, LayoutDashboard } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,24 +20,38 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass py-4' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <div className="bg-primary/20 p-2 rounded-xl">
             <Brain className="w-8 h-8 text-primary" />
           </div>
-          <span className="text-2xl font-bold tracking-tighter">Smart<span className="text-gradient">Quiz</span></span>
-        </div>
+          <span className="text-2xl font-bold tracking-tighter text-white">Smart<span className="text-gradient">Quiz</span></span>
+        </Link>
 
         <div className="hidden md:flex items-center gap-8">
           <a href="#features" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Features</a>
           <a href="#testimonials" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Testimonials</a>
-          <a href="#pricing" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Pricing</a>
+          <Link to="/quiz" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Quick Quiz</Link>
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <button className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Log in</button>
-          <button className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)]">
-            Get Started
-          </button>
+          {currentUser ? (
+            <Link 
+              to="/dashboard" 
+              className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2"
+            >
+              <LayoutDashboard size={18} /> Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link to="/login" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Log in</Link>
+              <Link 
+                to="/register" 
+                className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)]"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
 
         <button className="md:hidden text-gray-300" onClick={() => setIsOpen(!isOpen)}>
@@ -51,12 +68,20 @@ export default function Navbar() {
         >
           <a href="#features" className="text-gray-300 hover:text-white" onClick={() => setIsOpen(false)}>Features</a>
           <a href="#testimonials" className="text-gray-300 hover:text-white" onClick={() => setIsOpen(false)}>Testimonials</a>
-          <a href="#pricing" className="text-gray-300 hover:text-white" onClick={() => setIsOpen(false)}>Pricing</a>
+          <Link to="/quiz" className="text-gray-300 hover:text-white" onClick={() => setIsOpen(false)}>Quick Quiz</Link>
           <hr className="border-white/10 my-2" />
-          <button className="text-left text-gray-300 hover:text-white">Log in</button>
-          <button className="bg-primary text-white px-5 py-2.5 rounded-xl font-medium mt-2">
-            Get Started
-          </button>
+          {currentUser ? (
+            <Link to="/dashboard" className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-center" onClick={() => setIsOpen(false)}>
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link to="/login" className="text-left text-gray-300 hover:text-white" onClick={() => setIsOpen(false)}>Log in</Link>
+              <Link to="/register" className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-center mt-2" onClick={() => setIsOpen(false)}>
+                Get Started
+              </Link>
+            </>
+          )}
         </motion.div>
       )}
     </nav>

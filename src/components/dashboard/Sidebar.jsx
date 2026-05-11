@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 const menuItems = [
   { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/dashboard' },
   { icon: <BookOpen size={20} />, label: 'My Quizzes', path: '/quiz' },
+  { icon: <Code size={20} />, label: 'Code Lab', path: '/codelab' },
   { icon: <Trophy size={20} />, label: 'Leaderboard', path: '/leaderboard' },
   { icon: <Users size={20} />, label: 'Community', path: '/community' },
   { icon: <MessageSquare size={20} />, label: 'Messages', path: '/messages' },
