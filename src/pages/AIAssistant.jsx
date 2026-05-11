@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '../layouts/DashboardLayout';
 import { Send, Sparkles, Brain, Code, Lightbulb, User, Bot, Loader2, Zap } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 export default function AIAssistant() {
   const [messages, setMessages] = useState([
@@ -123,9 +124,30 @@ export default function AIAssistant() {
                       <div className={`p-4 rounded-2xl text-sm leading-relaxed ${
                         msg.role === 'user' 
                           ? 'bg-primary text-white rounded-tr-none' 
-                          : 'bg-white/5 text-gray-300 border border-white/5 rounded-tl-none'
+                          : 'bg-white/5 text-gray-300 border border-white/5 rounded-tl-none prose prose-invert prose-sm max-w-none'
                       }`}>
-                        {msg.content}
+                        {msg.role === 'user' ? (
+                          msg.content
+                        ) : (
+                          <ReactMarkdown
+                            components={{
+                              h1: ({node, ...props}) => <h1 className="text-xl font-bold text-white mb-2" {...props} />,
+                              h2: ({node, ...props}) => <h2 className="text-lg font-bold text-white mb-2" {...props} />,
+                              h3: ({node, ...props}) => <h3 className="text-md font-bold text-white mb-2 underline" {...props} />,
+                              code: ({node, inline, ...props}) => 
+                                inline 
+                                  ? <code className="bg-white/10 px-1 rounded text-primary" {...props} />
+                                  : <pre className="bg-black/40 p-4 rounded-xl border border-white/10 overflow-x-auto my-2">
+                                      <code className="text-primary-200" {...props} />
+                                    </pre>,
+                              p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                              ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2" {...props} />,
+                              li: ({node, ...props}) => <li className="mb-1" {...props} />,
+                            }}
+                          >
+                            {msg.content}
+                          </ReactMarkdown>
+                        )}
                       </div>
                     </div>
                   </motion.div>
